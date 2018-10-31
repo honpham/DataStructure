@@ -64,6 +64,34 @@ void insertAtEnd(struct Node **aHeadRef, int aNewData) {
 	return;
 }
 
+// Given a reference (pointer to pointer) to the head of a list and key,
+// Deletes the first occurrence of key in linked list
+void deleteNode(struct Node **aHeadRef, int aKey) {
+	// Store head node
+	struct Node *temp = *aHeadRef;
+	// The previous node of the node to be deleted
+	struct Node *previousNode;
+
+	// If head node itself holds the key to be deleted
+	if (temp != NULL && temp->data == aKey) {
+		*aHeadRef = temp->next; // Changed head
+		delete temp; 			// Free old head
+		return;
+	}
+
+	// Search for the key to be deleted
+	// keep track of the previous node as we need to change previousNode->next
+	while (temp != NULL && temp->data != aKey) {
+		previousNode = temp;
+		temp = temp->next;
+	}
+	// If key was not present in linked list
+	if (temp == NULL) return;
+	// Unlink the node from linked list
+	previousNode->next = temp->next;
+	delete temp; // Free memory
+}
+
 // Utinity function to print contents of linked list starting from head
 void printList(struct Node *nodeHead) {
 	while (nodeHead != NULL) {
@@ -82,6 +110,10 @@ int main() {
 	insertAtBegining(&head, 4);
 	// Insert 5 after 4, so linked list becomes 4->5->3->NULL
 	insertAfterNode(head, 5);
+	printList(head);
+
+	// Delete node have value is 4
+	deleteNode(&head, 4);
 	printList(head);
 	return 0;
 }
